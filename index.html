@@ -3,67 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Hệ thống Quản lý Sản xuất</title>
+    <title>Timing System - Admin Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <div class="container">
-        <nav class="sidebar">
-            <h2>SX-ADMIN</h2>
-            <ul>
-                <li class="active" onclick="showSection('dashboard')">Dashboard</li>
-                <li onclick="showSection('sessions')">Phiên sản xuất</li>
-                <li onclick="showSection('config')">Cấu hình & QR</li>
-            </ul>
-            <div class="admin-info">
-                <span>Admin: vinh@factory.com</span>
-                <button id="logoutBtn">Đăng xuất</button>
-            </div>
-        </nav>
+<body class="bg-slate-50 text-slate-900">
 
-        <main class="content">
-            <section id="dashboard">
-                <h1>Dashboard Tổng quan</h1>
-                <div class="stats-grid">
-                    <div class="stat-card"><h3>Tổng phiên</h3><p id="totalSessions">1,250</p></div>
-                    <div class="stat-card"><h3>Đang xử lý</h3><p id="processing">45</p></div>
-                    <div class="stat-card"><h3>Hoàn tất</h3><p id="completed">1,180</p></div>
-                    <div class="stat-card"><h3>Tỷ lệ hoàn thành</h3><p>94.4%</p></div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="productionChart"></canvas>
-                </div>
-            </section>
+    <div id="main-admin" class="min-h-screen flex">
+        <aside class="w-64 bg-slate-900 text-white flex flex-col fixed h-full">
+            <div class="p-8 text-xl font-bold text-indigo-400 italic border-b border-slate-800 text-center tracking-widest">TIMING PRO</div>
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <button onclick="showSection('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center p-4 rounded-2xl nav-active transition">
+                    <i class="fas fa-chart-pie w-5"></i> <span class="ml-3 font-semibold text-sm">Dashboard</span>
+                </button>
+                <button onclick="showSection('participants')" id="btn-participants" class="nav-btn w-full flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 transition">
+                    <i class="fas fa-running w-5"></i> <span class="ml-3 font-semibold text-sm">Kết quả thi đấu</span>
+                </button>
+                <button onclick="showSection('qr-view')" id="btn-qr-view" class="nav-btn w-full flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 transition">
+                    <i class="fas fa-qrcode w-5"></i> <span class="ml-3 font-semibold text-sm">Mã QR Hệ thống</span>
+                </button>
+            </nav>
+        </aside>
 
-            <section id="sessions" style="display:none;">
-                <h1>Danh sách phiên sản xuất</h1>
-                <div class="filters">
-                    <input type="text" placeholder="Tìm mã số định danh...">
-                    <select>
-                        <option>Tất cả trạng thái</option>
-                        <option>In Progress</option>
-                        <option>Completed</option>
-                        <option>Invalid</option>
-                    </select>
+        <div class="flex-1 ml-64 flex flex-col min-h-screen">
+            <header class="bg-white border-b p-5 px-8 flex justify-between items-center sticky top-0 z-10">
+                <h2 id="page-title" class="text-lg font-bold text-slate-800 uppercase italic tracking-wider">Dashboard Overview</h2>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-emerald-50 text-emerald-600 border border-emerald-100 px-3 py-1.5 rounded-full text-[10px] font-bold">LIVE MODE</div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Mã định danh</th>
-                            <th>Start Time</th>
-                            <th>Mid Time</th>
-                            <th>Finish Time</th>
-                            <th>Lead Time</th>
-                            <th>Trạng thái</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sessionTableBody">
-                        </tbody>
-                </table>
-            </section>
-        </main>
+            </header>
+
+            <main class="p-8 space-y-8">
+                <div id="sec-dashboard" class="space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Tổng VĐV</p>
+                            <h3 class="text-4xl font-bold text-slate-800 mt-1">12</h3>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Hoàn thành</p>
+                            <h3 class="text-4xl font-bold text-emerald-600 mt-1">9</h3>
+                        </div>
+                        <div class="lg:col-span-2 bg-indigo-600 rounded-[32px] p-6 text-white flex items-center justify-between">
+                            <div>
+                                <h4 class="text-lg font-bold italic underline">Tỷ lệ hoàn thành</h4>
+                                <div class="mt-4 flex space-x-6">
+                                    <div><span class="block text-2xl font-bold">75%</span><span class="text-[10px] uppercase text-indigo-200">Thành công</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-slate-700 mb-4 italic text-sm">TOP 5 VỀ ĐÍCH</h3>
+                            <div id="top-5-list" class="space-y-2"></div>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-rose-600 mb-6 italic text-sm">VI PHẠM / DNF</h3>
+                            <div id="violation-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sec-participants" class="hidden">
+                    <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-white text-[10px] uppercase font-bold">
+                                <tr>
+                                    <th class="p-5">STT</th>
+                                    <th class="p-5">Vận động viên</th>
+                                    <th class="p-5 text-center">Start</th>
+                                    <th class="p-5 text-center">Checkpoint</th>
+                                    <th class="p-5 text-center">Finish</th>
+                                    <th class="p-5 text-right">Tổng</th>
+                                    <th class="p-5 text-center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full-table-body" class="divide-y divide-slate-100 text-xs"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="sec-qr-view" class="hidden text-center">
+                    <div class="max-w-4xl mx-auto bg-white p-12 rounded-[40px] shadow-sm border border-slate-100">
+                        <h3 class="text-2xl font-bold mb-12 italic">Mã QR Định Danh</h3>
+                        <div class="grid grid-cols-3 gap-12">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=START" class="mx-auto">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CP" class="mx-auto">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=FINISH" class="mx-auto">
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
